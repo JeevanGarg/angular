@@ -1,0 +1,33 @@
+
+  <p-dialog header="Download Deliverables" [responsive]="true" [(visible)]="openDownload" [positionTop]="100" [width]="930" [minWidth]="930" 
+            (onHide)="close()" class="Request_ty download-deliver" [modal]="true" [baseZIndex]="10000" [draggable]="false">
+    <!--[width]="930" [minWidth]="930"-->
+
+    <div class="col-md-12 col-lg-12 marginB20" *ngIf="downloadFiles != null || downloadFiles!= undefined">
+      <div class="bg_grey" *ngIf="downloadFiles.length>0">
+        <ul class="download-listItems scroll-window" slimScroll [options]="opts" [scrollEvents]="scrollEvents">
+          <li *ngFor="let file of downloadFiles">
+            <div class="col-md-10 col-sm-10 col-xs-10">
+              <span>{{file.fileName}}</span>
+            </div>
+            <div class="col-md-2 col-sm-2 col-xs-2">
+              <a href="javascript:void(0)" download (click)="onDownload(file.fileName)">
+                <i class="down-icon pull-right" id="12">
+                </i>
+              </a>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="clearfix marginB10"></div>
+      <label>Comments</label>
+      <textarea class="form-control" rows="4" placeholder="" [(ngModel)]="comments" disabled></textarea>
+      <div class="col-md-12 col-sm-12 col-xs-12  text-center">
+        <button class="btn btn_yes" type="button" (click)="onDownloadAllfor()">Download All</button>
+      </div>
+    </div>
+  </p-dialog>
+
+
+    <!--[(visible)]="openDownload"-->

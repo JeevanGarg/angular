@@ -1,0 +1,210 @@
+<app-header></app-header>
+<div class="section-one">
+  <div class="container">
+    <div class="row pib_select_cal">
+      <div class="col-md-8 col-sm-7 col-xs-12 marginB10">
+        <app-request-header-for-meeting [meetingRequestData]="meetingReqCategories"></app-request-header-for-meeting>        
+      </div>
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>
+<section class="design-process-section bg_grey paddingBottom40 paddingTop20">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+        <div class="raise-request-main-heading">
+          <h1 class="marginT0 marginB10">Step-2 <span class="size14 bold">(Select Request Types)</span></h1>
+          <a _ngcontent-edm-c7="" class="btn btn_no pull-right marginB10" (click)="gobackStep1()"><i _ngcontent-edm-c7="" class="fa  marginR5" (click)="gobackStep1()"></i>BACK</a>
+        </div>
+
+        <div class="request-step-container white-box border_Top_purple">
+          <div class="">
+            <!-- design process steps-->
+            <h4 class="d-in-block marginT0 size14">
+              {{companyName}}
+              <span class="divider" *ngIf="(companyName!=undefined && companyName!= '')  && (executivename!=undefined && executivename!=null && executivename!='' )">|</span>
+              <span>
+                {{executivename }}
+              </span>
+              <!--<span *ngIf="executivename != null && executivename != undefined &&  executivename!= ''">
+
+                <span *ngIf="executivename.length>=50">
+                  <span class="showClass 2" id="21">
+                    <span>
+                      {{executivename | slice:0:50 }}
+                      <a href="javascript:void(0)" class="1" (click)="toggle($event)" *ngIf="executivename!=''">Read More</a>
+                    </span>
+                    <span class="hide">
+                      {{executivename}}
+                      <a href="javascript:void(0)" (click)="toggle($event)" *ngIf="executivename!='-'">Read Less</a>
+                    </span>
+                  </span>
+                </span>
+              </span>-->
+            </h4>
+
+            <ul class="nav nav-tabs process-model more-icon-preocess grey_bg_steps" id="procesess" role="tablist" #tablist *ngIf="parentCategories.length>0">
+              <li [ngClass]="activeTab==masterLst.name?'selectedReqTab':''" role="presentation" [class.active]="visited.lastIndexOf(masterLst.name)>-1" *ngFor="let masterLst of parentCategories;let item = index">
+                <a href="#PIB" aria-controls="discover" role="tab" data-toggle="tab" (click)="selectCategory(item,false,false)" [ngClass]="NothingSelected && (visited.length==parentCategories.length || visited.lastIndexOf(activeTab)-1!=item || visited.lastIndexOf(activeTab)+1!=item || visited.lastIndexOf(parentCategories[item-1].name)!=-1 )?'adisabled':''">
+                  <i class="img_sprite" [class]="masterLst.icon"></i>
+                  <p>{{masterLst.name}}</p>
+                </a>
+              </li>
+
+            </ul>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class=" marginT30 dflex">
+                <div class="tab-content border_Top_purple marginB30 tabi_sheet">
+                  <div role="tabpanel" class="tab-pane active" id="PIB">
+                    <!-- <div class="col-md-12 col-sm-12 col-xs-12 scroll-window" slimScroll [options]="opts" [scrollEvents]="scrollEvents">-->
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <div class="paddingTop15">
+                        <h3 class="marging0 paddingBottom10 size20 tab-panel-head">
+                          <span class="tab-panel-heading">{{currCat}}</span>
+                          <!--<i class="img_sprite dif_Ico" data-toggle="popover" data-trigger="hover"
+       data-content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. ">
+    </i>-->
+                          <!--<a href="javascript:void(0)" class=" pull-right heart_ico" (click)="updateFavouritesStatus(parentCatID)">-->
+                          <a [ngClass]="favStatus.isNew?'adisabled':''" class=" pull-right fvrite_box" (click)="updateFavouritesStatus(parentCatID)">
+                            <ui-switch [(ngModel)]="favStatus.isFav" [disabled]="favStatus.isNew" (change)="updateFavouritesStatus(parentCatID)"></ui-switch>
+                            <span *ngIf="favStatus.isFav" class="size12 d-in-block">De-Select Favourites</span>
+                            <span *ngIf="!favStatus.isFav" class="size12 d-in-block">Select Favourites</span>
+                          </a>
+                        </h3>
+                        <div class="clearfix"></div>
+
+                        <!-- <div class="ui-scrollpanel-wrappera">
+                          dsjf<br>
+                          dsjf<br>
+                          dsjf<br>
+                          dsjf<br>
+                          dsjf<br>
+                          dsjf<br>
+                          dsjf<br>
+                          dsjf<br>
+                          dsjf<br>
+                          dsjf<br>
+                        
+                        </div> -->
+
+                        <p-scrollPanel id="added-buttons" [style]="{width: '100%', height: '200px'}">
+                          <div *ngIf="loadChild">
+                            <request-child [(allCategories)]="subCategories" (modifiedCategories)='updateCategories($event)' (checkedCategories)='updateCheckedState($event)' (modifiedCategoryID)='updateModifiedCategoryId($event)' [(myFavStatus)]="favStatus" (updateFavIconStatus)="setFavouritesIcon($event.isFav,true,$event)"></request-child>
+                          </div>
+                        </p-scrollPanel>
+
+                        <div class="scroll-buttons hidden-md-up ">
+                          <button id="slideTop" type="button" (click)="onTopClick()"><i class="fa fa-chevron-up" aria-hidden="true"></i></button>
+                          <button id="slideBottom" type="button" (click)="onBottomClick()"><i class="fa fa-chevron-down" aria-hidden="true"></i></button>
+                        </div>
+                      </div>
+                      
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="request-step-bottom-row marginT20 text-center">
+          <div class="col-md-12 col-sm-12 col-xs-12  text-center">
+            <button class="btn btn_step_no marginR10" type="button" data-dismiss="modal" (click)="oncancelRequest()">Cancel</button>
+            <!--Added Done and Previous buttons-->
+            <!--Commented by Pooja-->
+            <!--<button class="btn btn_step_yes marginR10" type="button" id="prevbtn" [disabled]="!isPreviousEnabled"
+                    (click)="isPrevClicked=true;selectCategory(currentCatId,0,true,true)">
+            <i class="fa fa-arrow-left size14 marginR10"></i> Previous</button>
+            <button class="btn btn_step_yes marginR10" type="button" id="nxtbtn" [disabled]="!isNextEnabled"
+                    (click)="selectCategory(currentCatId,0,true)">Next
+            <i class="fa fa-arrow-right size14 marginL10"></i></button>-->
+
+            <button class="btn btn_step_yes previous-btn marginR10" type="button"
+                    id="prevbtn" [disabled]="!isPreviousEnabled"
+                    (click)="selectCategory(currentCatId,0,true,true)">
+              <i class="previous-icon"></i></button>
+            <button class="btn btn_step_yes next-btn marginR10" type="button" id="nxtbtn"
+                    [disabled]="!isNextEnabled" (click)="selectCategory(currentCatId,0,true)">
+              <i class="next-icon"></i></button>
+            <button class="btn btn_step_yes" type="button" id="donebtn" [disabled]="!isDoneEnabled"
+                    (click)="NavigateToPreview()">
+              Done
+            </button>
+            <!--  <button class="btn  btn_yes bt_ne Bradius50_btn_st" type="submit"
+                [disabled]="!isSubmitEnabled" (click)="submitRequest()">Submit</button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<p-confirmDialog header="Confirmation" class="confirmation_dialog" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-dialog header="Select Attendies" [(visible)]="display" [closable]="true" [modal]="true" [responsive]="true" [blockScroll]="true" [style]="{width: '550px', minWidth: '200px'}" [minY]="70"
+          [closeOnEscape]="true" [positionTop]="100" class="raise-request-new">
+  <div class="dialog-box">
+    <div class="">
+      <div class="col-md-12 col-sm-12 col-xs-12 padding0">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-search"></i></span>
+          <input type="text" class="form-control" placeholder="Search Attendies here..">
+        </div>
+
+      </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 paddingL0 paddingR0 marginT10">
+      <ol class="list-group">
+        <li class="list-group-item blue_bg bor_top_list">
+          <div class="form-check">
+            <label>
+              <input type="checkbox" name="check">
+              <span class="label-text">PIB</span>
+            </label>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="form-check">
+            <label>
+              <input type="checkbox" name="check" checked="">
+              <span class="label-text">Quick Profile</span>
+            </label>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="form-check">
+            <label>
+              <input type="checkbox" name="check" checked="">
+              <span class="label-text">Internal Data Referencing</span>
+            </label>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="form-check">
+            <label>
+              <input type="checkbox" name="check" checked="">
+              <span class="label-text">Bios of key Management</span>
+            </label>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+</p-dialog>
+<p-dialog header="Confirmation" [(visible)]="displayFavoriteDialog" [closable]="true" [modal]="true" [responsive]="true" [blockScroll]="true" [style]="{width: '450px', minWidth: '300px'}" [minY]="70"
+          [closeOnEscape]="true" [positionTop]="100" class="favourite_dialogue">
+  <div class="favdialog-box">
+    <h4>You have made some changes to {{activeTab.trim()}},<br /> Do you want to make this selection favourite.</h4>
+    <div class="marginT20">
+      <button class="btn btn_step_no marginR10" (click)="DoNotMakeFavorite()">No, This is Temporary</button>
+      <button class="btn btn_step_yes" (click)="MakeFavorite()">Yes, Make it Favourite</button>
+    </div>
+    
+  </div>
+</p-dialog>
+<app-footer></app-footer>
+
+

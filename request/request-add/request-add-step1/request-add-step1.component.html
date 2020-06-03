@@ -1,0 +1,100 @@
+<app-header></app-header>
+<div class="section-one">
+  <div class="container">
+    <div class="row pib_select_cal">
+      <div class="col-md-8 col-sm-7 col-xs-12 marginB10">
+        <app-request-header-for-meeting [meetingRequestData]="meetingRequestData"></app-request-header-for-meeting>        
+              </div>
+            </div>
+          </div>
+        </div>
+<div class="clearfix"></div>
+<section class="design-process-section bg_grey paddingBottom40 paddingTop20">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+              <div class="raise-request-main-heading">
+                <h1 class="marginT0 marginB10">Step-1 <span class="size14 bold">(Select Request Types)</span></h1>
+              </div>
+
+              <div class="request-step-container white-box border_Top_purple">
+                <div class="row">
+                  <div class="col-md-6 col-lg-6 col-xs-12 col-sm-6">
+                    <label>COMPANY NAME</label>
+                    <input type="text" class="form-control" id="companyName" [(ngModel)]="companyName"
+                            name="companyName" (input)="addCompanyName($event)" maxlength="500" placeholder="Add name here..">
+                  </div>
+                  <div class="col-md-6 col-lg-6 col-xs-12 col-sm-6 autocomplete-box">
+                    <label> EXECUTIVE NAME</label>
+                    <p-autoComplete [(ngModel)]="execName" [multiple]="true" placeholder="Enter executives names" (onKeyUp)="onKeyUp($event)" (onUnselect)="OnUnSelectExecName($event)">
+                    </p-autoComplete>
+                    <button class="btn btn_add" (click)="getExecutiveSelection()" *ngIf="enableList"><img src="assets/images/add-user.png"></button>
+                    </div>
+                  </div>
+                <div class="row marginT30">
+    <div class="col-md-3 col-sm-6 col-lg-3 col-xs-12" *ngFor="let requestCat of requestCategories;let item=index">
+      <div class="step-small-box borderAll borderRadius4 padding15" [class.request-type-disabled]="requestCat.isDisabled">
+        <div class="form-check step-small-box-checkBox">
+          <label>
+            <input type="checkbox" name="check" [checked]="requestCat.isChecked" [disabled]="requestCat.isDisabled"
+                    (change)="checkValue($event,requestCat.name)">
+            <span class="label-text">&nbsp;</span>
+          </label>
+        </div>
+        <div class="text-center">
+          <div><i class="img_sprite_new" [ngClass]="requestCat.icon" ></i></div>
+          <p class="size18 marginT10 bold">{{requestCat.name}}</p>
+        </div>
+      </div>
+    </div>
+
+      
+  </div>
+  </div>
+  
+</div>
+<div class="clearfix">&nbsp;</div>
+<div class="request-step-bottom-row  text-center">
+  <div class="col-md-12 col-sm-12 col-xs-12 marginT20  text-center">
+    <button class="btn btn_step_no marginR10" type="button" data-dismiss="modal" (click)="oncancelRequest()">Cancel</button>
+    <button class="btn btn_step_yes" type="button" [disabled]="!enableToNextStep" (click)="createRequest()">Done</button>
+  </div>
+</div>
+    </div>
+  </div>
+
+</section>
+<p-dialog header="Select Attendees" [(visible)]="display" [closable]="true" [modal]="true" [responsive]="true" [blockScroll]="true"
+          [style]="{width: '550px', minWidth: '200px'}" [minY]="70"
+          [closeOnEscape]="true" [positionTop]="100" class="raise-request-new">
+  <div class="dialog-box">
+    <div class="">
+      <div class="col-md-12 col-sm-12 col-xs-12 padding0">
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-search"></i></span>
+          <input type="text" class="form-control" placeholder="Search Attendies here.." [(ngModel)]="name">
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 paddingL0 paddingR0 marginT10 attendies_popup_box">
+      <ol class="list-group" >
+        <li class="list-group-item blue_bg bor_top_list" *ngFor="let item of externalAttendesArray | filter:name">
+          <div class="form-check">
+            <label>
+              <input type="checkbox" name="check" [checked]="item.isChecked" (change)="checkSelectedAttendee($event,item.email)">
+              <span class="label-text">{{item.email}}</span>
+            </label>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="col-md-12 col-sm-12 col-xs-12  text-center">
+      <button class="btn btn_no marginR10" data-dismiss="modal" (click)="cancelAttendesSelection()">Cancel</button>
+      <button class="btn btn_yes" data-dismiss="modal" [disabled]="!enableToSubmitAttendees" (click)="submitAtttendes()">Submit</button>
+    </div>
+  </div>
+</p-dialog>
+<p-confirmDialog header="Confirmation" class="confirmation_dialog" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<app-footer></app-footer>

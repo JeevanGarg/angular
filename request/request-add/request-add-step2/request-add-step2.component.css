@@ -1,0 +1,305 @@
+/*Steps design*/
+.design-process-section .text-align-center {
+  line-height: 25px;
+  margin-bottom: 12px;
+}
+
+.design-process-content img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  max-height: 100%;
+}
+
+.design-process-content h3 {
+  margin-bottom: 16px;
+}
+
+.design-process-content p {
+  line-height: 26px;
+  margin-bottom: 12px;
+}
+.process-model {
+  list-style: none;
+  position: relative;
+  max-width: 100%;
+  margin: 5px 0;
+  padding: 15px;
+  border: none;
+  z-index: 0;
+  text-align: center;
+  background: #ececec;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  font-size: 0;
+  height: 116px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  -ms-overflow-style: none;
+  width: 100%;
+}
+
+  .process-model::-webkit-scrollbar {
+    display: none;
+  }
+
+  .process-model li:after {
+    position: absolute;
+    top: 26px;
+    /*left: 86px;*/
+    content: "";
+    width: 100%;
+    height: 1px;
+    background: #dadada;
+    z-index: -1;
+  }
+
+  .process-model li:last-child:after {
+    display: none;
+  }
+
+  .process-model li.visited::after {
+    background: #57b87b;
+  }
+
+  .process-model li {
+    display: inline-block;
+    text-align: center;
+    float: none;
+    margin: 0;
+    vertical-align: top;
+    font-size: 13px;
+    padding: 0 27px;
+  }
+
+@media (max-width: 540px) {
+  .tabi_sheet .scroll-window > h3 {
+    width: 100%;
+    position: relative;
+    display: block;
+    clear: both;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+}
+
+
+  .nav-tabs.process-model > li.active > a, .nav-tabs.process-model > li.active > a:hover, .nav-tabs.process-model > li.active > a:focus, .process-model li a:hover, .process-model li a:focus {
+    border: none;
+    background: transparent;
+    color: #484848;
+  }
+
+  .process-model li a {
+    padding: 0;
+    border: none;
+    color: #333333;
+    width: 100%;
+  }
+
+  .process-model li.active, .process-model li.visited {
+    color: #333333;
+  }
+
+  .process-model li.active a, .process-model li.active a:hover, .process-model li.active a:focus, .process-model li.visited a, .process-model li.visited a:hover, .process-model li.visited a:focus {
+    color: #fff;
+  }
+
+  .process-model li.active p, .process-model li.visited p {
+    color: #333333;
+  }
+
+  .process-model li i {
+    display: block;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    margin: 0 auto;
+    background: url(src/assets/images/icon-sprite.png) #fff;
+    border: 1px solid #dadada;
+    line-height: 50px;
+    font-size: 30px;
+    border-radius: 50%;
+    color: #4675a9;
+  }
+
+  .process-model li.active i, .process-model li.visited i {
+    background: url(src/assets/images/icon-sprite.png) #532e50;
+    border-color: #532e50;
+    color: #fff;
+  }
+
+    .process-model li p {
+      font-size: 13px;
+      margin-top: 4px;
+      margin-bottom: 0;
+      line-height: normal;
+      font-family: "FSAlbert Bold";
+      border-bottom: 1px solid transparent;
+      padding-bottom: 10px;
+      position: relative;
+      display: inline-block;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  .process-model li.active.selectedReqTab p {
+    border-bottom: 1px solid #532e50;
+    /*padding-bottom: 10px;
+    position: relative;
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;*/
+  }
+  .process-model li.active.selectedReqTab p::after {
+    content: "\f0d8";
+    text-align: center;
+    margin: auto;
+    width: 100%;
+    top: 16px;
+    position: absolute;
+    left: 45%;
+    transform: translateX(-45%);
+    font-family: FontAwesome;
+    display: inline-block;
+    color: #532e50;
+  }
+
+  .process-model.contact-us-tab li.visited a, .process-model.contact-us-tab li.visited p {
+    color: #606060 !important;
+    font-weight: normal
+  }
+
+  .process-model.contact-us-tab li::after {
+    display: none;
+  }
+
+  .process-model.contact-us-tab li.visited i {
+    border-color: #e5e5e5;
+  }
+
+.pib_Ico {
+  background-position: 1px -244px !important;
+}
+.quic_Ico {
+  background-position: -39px -244px !important;
+}
+.bios_Ico {
+  background-position: -119px -246px !important;
+}
+.data_refer_Ico {
+  background-position: -78px -246px !important;
+}
+  .Icon_5 {
+    background-position: -39px -244px !important;
+  }
+  .Icon_6 {
+    background-position: -78px -244px !important;
+  }
+  .Icon_7 {
+    background-position: 2px -244px !important;
+  }
+
+  .Icon_8 {
+    background-position: -159px -244px !important;
+  }
+
+.process-model li.active .pib_Ico, .process-model li.visited .pib_Ico {
+  background-position: 1px -325px !important;
+}
+.process-model li.active .quic_Ico, .process-model li.visited .quic_Ico {
+  background-position: -37px -323px !important;
+}
+.process-model li.active .bios_Ico, .process-model li.visited .bios_Ico {
+  background-position: -120px -324px !important;
+}
+.process-model li.active .Icon_4, .process-model li.visited .Icon_4 {
+  background-position: 2px -237px !important;
+}
+.process-model li.active .data_refer_Ico, .process-model li.visited .data_refer_Ico {
+  background-position: -79px -323px !important;
+}
+.process-model li.active .Icon_6, .process-model li.visited .Icon_6 {
+  background-position: -77px -235px !important;
+}
+.process-model li.active .Icon_7, .process-model li.visited .Icon_7 {
+  background-position: 2px -237px !important;
+}
+.process-model li.active .Icon_8, .process-model li.visited .Icon_8 {
+  background-position: -160px -236px !important;
+}
+  #process-tab .panel-group {
+    max-height: 350px;
+    overflow: auto;
+    min-height: 320px;
+  }
+  .process-model li.active.selected i {
+    background: url(src/assets/images/icon-sprite.png) rgba(70, 117, 169, 0.5);
+  }
+a.adisabled {
+  cursor: not-allowed;
+  opacity: .65;
+}
+
+  a.adisabled:hover {
+    text-decoration: none;
+  }
+
+  a.adisabled:focus {
+    text-decoration: none;
+  }
+
+  a.adisabled:active {
+    text-decoration: none;
+  }
+
+.aPanel {
+  margin: 1em;
+}
+
+i.adisabled {
+  cursor: not-allowed;
+  opacity: .65;
+}
+
+  i.adisabled:hover {
+    text-decoration: none;
+  }
+
+  i.adisabled:focus {
+    text-decoration: none;
+  }
+
+  i.adisabled:active {
+    text-decoration: none;
+  }
+h3.tab-panel-head {
+  float: left;
+  width: 100%;
+}
+span.tab-panel-heading {
+  font-family: "FSAlbert Bold";
+}
+
+@media (max-width: 540px) {
+  .tabi_sheet .scroll-window > h3 {
+    width: 100%;
+    position: relative;
+    display: block;
+    clear: both;
+    margin-bottom: 0;
+    font-size: 14px;
+  }
+  .fvrite_box {
+      margin-top: 5px;
+      float: left !important;
+  }
+  span.tab-panel-heading {
+    float: left;
+    width: 100%
+  }
+}
+

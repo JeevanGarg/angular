@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" ng-app="bootstrapAng">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
+  <script data-require="jquery@2.2.0" data-semver="2.2.0" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" data-semver="3.3.6" data-require="bootstrap.js@3.3.6"></script>
+
+  <!-- Bootstrap CSS -->
+  <title>PIB</title>
+</head>
+<body>
+  <div class="container-login">
+    <div class="wrap-login">
+      <form class="login-form" [formGroup]="loginForm">
+        <div class="logo marginB40">
+          <img src="assets/images/logo_login.png" alt="" class="img-responsive">
+        </div>
+
+        <div *ngIf="email.invalid && (email.dirty) && (!invalidUser)" class="alert alert-danger">
+          <small *ngIf="email.errors.required &&  (email.dirty)">
+            * Email is required
+          </small>
+          <small *ngIf="email.errors.pattern && email.dirty && (!invalidUser)">
+            *  Please enter a valid email address
+          </small>
+        </div>
+        <div *ngIf="password.invalid && password.dirty && !invalidUser" class="alert alert-danger">
+          <small *ngIf="password.errors.required &&  (password.dirty || password.touched)" class="">
+            * Password is required.
+          </small>
+        </div>
+        <div *ngIf="invalidUser" class="alert alert-danger">
+          <small class="">
+            * Please enter valid email and password.
+          </small>
+        </div>
+
+        <div class="wrap-inputlogin borderbottom0">
+          <input class="inputlogin" type="email" name="email" formControlName="email" (change)="onemailChange($event)">
+          <span class="focus-inputlogin"></span> <span class="label-inputlogin">Email</span>
+
+        </div>
+        <div class="wrap-inputlogin">
+          <input class="inputlogin" type="password" name="pass" formControlName="password">
+          <span class="focus-inputlogin"></span> <span class="label-inputlogin">Password</span>
+        </div>
+       
+        <div class="main-checkbox-sec">
+          <div class="checkbox-sec">
+            <div class="form-check pull-left input-checkboxlogin">
+              <label>
+                <input id="ckb1" type="checkbox" name="remember-me" formControlName="rememberMe">
+                <span class="label-text"></span>
+              </label>
+            </div>
+            <label class="rememberMeLabl" for="ckb1"> Remember me for 30 days</label>
+          </div>
+          <div class="forgot-sec"> <a href="javascript:void(0)" class="txt1" (click)="sendResetPassword()">Forgot Password? </a> </div>
+        </div>
+        <div class="form-btn-sec">
+          <button class="btn form-btn" [disabled]="!loginForm.valid" (click)="onSubmit()"> Login </button>
+          <!-- <p-messages [(value)]="msgs"></p-messages>-->
+        </div>
+
+        <div class="row">
+          <div class="col-md-12 txt-login1"><p class="size12"> New to the platform ? <a href="#" target="_blank" routerLink="/register">Register Here</a></p> </div>
+        </div>
+        <div class="row marginT40">
+          <div class="col-md-4 col-sm-4 col-xs-12 txt-login"> <img src="assets/images/login_evs.png" class="img-responsive"> </div>
+          <div class="col-md-8 col-sm-8 col-xs-12 footer_tex"> <span class="txt-login"> By Logging in, you agree to Evalueserve's </span> <span class="txt-login"><a href="#" target="_blank">Terms and conditions</a> & <a href="#" target="_blank">Privacy Policy</a></span> <p class="size11 text-right">Copyright 2019. Evalueserve.com Pvt. Ltd.  All rights reserved.</p></div>
+        </div>
+      </form>
+      <div class="login-more" style="background-image: url('assets/images/bg-login.jpg');"> </div>
+    </div>
+  </div>
+ </body>
+</html>
+

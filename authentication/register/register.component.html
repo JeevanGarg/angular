@@ -1,0 +1,135 @@
+<div class="container-login">
+  <div class="wrap-login">
+    <form class="login-form" [formGroup]="registerForm">
+      <div class="logo marginB40"> <img src="assets/images/logo_login.png" alt="" class="img-responsive"></div>
+<div *ngIf="genericErrorMessage!=''" class="alert alert-danger">
+  <small *ngIf="genericErrorMessage!=''">
+    {{genericErrorMessage}}
+  </small>
+</div>
+      <div *ngIf="formInstance.firstName.invalid && formInstance.firstName.dirty" class="alert alert-danger">
+        <small *ngIf="formInstance.firstName.errors.required &&  (formInstance.firstName.dirty || formInstance.firstName.touched)" class="">
+          * First Name is required.
+        </small>
+        <small *ngIf="formInstance.firstName.errors.pattern && formInstance.firstName.dirty">
+          *  Please enter a valid First Name
+        </small>
+      </div>
+      <div *ngIf="formInstance.lastName.invalid && formInstance.lastName.dirty" class="alert alert-danger">
+        <small *ngIf="formInstance.lastName.errors.required &&  (formInstance.lastName.dirty || formInstance.lastName.touched)" class="">
+          * Last Name is required.
+        </small>
+        <small *ngIf="formInstance.lastName.errors.pattern && formInstance.lastName.dirty">
+          *  Please enter a valid Last Name
+        </small>
+      </div>
+      <div *ngIf="formInstance.email.invalid && (formInstance.email.dirty)" class="alert alert-danger">
+        <small *ngIf="formInstance.email.errors.required &&  (formInstance.email.dirty)">
+          * Email is required
+        </small>
+        <small *ngIf="formInstance.email.errors.pattern && formInstance.email.dirty">
+          *  Please enter a valid email address
+        </small>
+      </div>
+    
+      <div *ngIf="formInstance.officeId.invalid && formInstance.officeId.dirty" class="alert alert-danger">
+        <small *ngIf="formInstance.officeId.errors.required &&  (formInstance.officeId.dirty || formInstance.officeId.touched)" class="">
+          * Office location is required.
+        </small>
+      </div>
+      <div *ngIf="formInstance.phone.invalid && formInstance.phone.dirty" class="alert alert-danger">
+        <small *ngIf="formInstance.phone.errors.required &&  (formInstance.phone.dirty || formInstance.phone.touched)" class="">
+          * Phone is required
+        </small>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-sm-6 marginB10">
+          <div class="wrap-inputlogin borderbottom0">
+            <label class="label-inputlogin">
+              First Name
+              <span class="text-danger fontsize7 mandatory"><i class="fa fa-asterisk"></i></span>
+            </label>
+            <input class="inputlogin" type="text" name="firstName" formControlName="firstName" maxlength="100">
+
+
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-6 marginB10">
+          <div class="wrap-inputlogin borderbottom0">
+            <input class="inputlogin" type="text" name="lastName" formControlName="lastName" maxlength="100">
+            <label class="label-inputlogin">Last Name <span class="text-danger fontsize7 mandatory"><i class="fa fa-asterisk"></i></span></label>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 col-sm-6 marginB10">
+          <div class="wrap-inputlogin borderbottom0">
+            <input class="inputlogin" type="email" name="email" formControlName="email">
+            <label class="label-inputlogin">
+              Email
+              <span class="text-danger fontsize7 mandatory"><i class="fa fa-asterisk"></i></span>
+            </label>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-6 marginB10">
+          <div class="wrap-inputlogin borderbottom0">
+            <input class="inputlogin" name="phone" type="text" formControlName="phone" maxlength="20">
+            <label class="label-inputlogin">
+              Phone
+              <span class="text-danger fontsize7 mandatory"><i class="fa fa-asterisk"></i></span>
+            </label>
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 col-sm-6 marginB10">
+          <div class="wrap-inputlogin borderbottom0">
+            <select class="selectInputlogin" formControlName="officeId">
+              <option *ngFor="let op of officeList" [ngValue]="op.id">{{op.officeName}}</option>
+            </select>
+            <label class="label-inputlogin">
+              Office Location
+              <span class="text-danger fontsize7 mandatory"><i class="fa fa-asterisk"></i></span>
+            </label>
+          </div>
+        </div>
+        <div class="col-md-6 col-sm-6 marginB10">
+          <div class="wrap-inputlogin borderbottom0">
+           <!-- <select class="selectInputlogin" formControlName="coverageGroup">
+               <option *ngFor="let op of coverageGroupList" [ngValue]="op.coverageId">{{op.title}}</option>
+            </select>-->
+            <p-multiSelect [options]="coverageGroupChoices" class="selectInputlogin registerMultiselect" [(ngModel)]="selectedGroups"  formControlName="coverageGroup">
+           <!--class="mulitiselectCoverageGrp is-valid"-->
+            </p-multiSelect>
+            <label class="label-inputlogin">
+              Coverage Group
+              <!-- <span class="text-danger fontsize7 mandatory"><i class="fa fa-asterisk"></i></span> -->
+            </label>
+
+          </div>
+        </div>
+      </div>
+      <div class="form-btn-sec">
+        <!--<button class="btn form-btn" [disabled]="(formInstance.phone.value!='')?registerForm.invalid:true" (click)="registeruser()">Register</button>-->
+        <button class="btn form-btn" (click)="registeruser()">Register</button>
+      </div>
+      <div class="row">
+        <div class="col-md-12 txt-login1">
+          <p class="size12"> Already Customer <a href="#" target="_blank">Login Here</a></p>
+        </div>
+      </div>
+      <div class="row marginT40">
+        <div class="col-md-4 col-sm-4 col-xs-8 txt-login"> <img src="assets/images/login_evs.png" class="img-responsive" alt=""> </div>
+        <div class="col-md-8 col-sm-8 col-xs-12 footer_tex">
+          <span class="txt-login"> By Loging in, you agree to Evalueserve's </span> <span class="txt-login"><a href="#" target="_blank">Terms and conditions</a> &amp; <a href="#" target="_blank">Privacy Policy</a></span>
+          <p class="size11 text-right">Copyright 2019. Evalueserve.com Pvt. Ltd.  All rights reserved.</p>
+        </div>
+      </div>
+    </form>
+    <div class="login-more" style="background-image: url('assets/images/bg-login.jpg');"> </div>
+  </div>
+</div>
+

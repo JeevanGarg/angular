@@ -1,0 +1,123 @@
+<app-header></app-header>
+<div class="section-one">
+  <div class="container">
+    <div class="row pib_select_cal">
+      <div class="col-md-4 col-sm-7 col-xs-12 marginB10">
+        <h1 class="d-inline">My Profile</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>
+<div class="userProfile-sec">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="userProfile-sec-inner">
+          <div class="user-profile-edit-row">
+            <a href="javascript:void(0)" class="profileEdit" (click)="userprofile_editClick()" *ngIf="profileEdit"><i class="fa fa-pencil"></i></a>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-3 userProfile-detailsImgBox">
+              <img src="./assets/images/userProfile.png" alt="User Profile" class="img-responsive">
+            </div>
+            <div class="col-md-9 col-lg-9 col-xs-9 col-sm-9 paddingL0 userProfile-detailsBox">
+              <div class="userProfile-details" [ngClass]="profileEdit?'show':'hide'">
+                <div class="row">
+                  <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 paddingL0 borderRight">
+                    <label>First Name</label>
+                    <div>{{myProfileToShow.firstName}}</div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 col-sm-5 col-xs-12 padding0">
+                    <label>Last Name</label>
+                    <div>{{myProfileToShow.lastName}}</div>
+                  </div>
+                </div>
+                <div class="gap10"></div>
+                <div class="row">
+                  <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 paddingL0 borderRight">
+                    <label>Email</label>
+                    <div>{{myProfileToShow.email}}</div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 col-sm-5 col-xs-12 padding0">
+                    <label>Phone</label>
+                    <div>{{myProfileToShow.phone}}</div>
+                  </div>
+                </div>
+                <div class="gap10"></div>
+                <div class="row">
+                  <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 paddingL0 borderRight">
+                    <label>Office Location</label>
+                    <div>{{myProfileToShow.officeId==null?'Null':getOfficeName(myProfileToShow.officeId)}}</div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 col-sm-5 col-xs-12 padding0">
+                    <label>Coverage Group</label>
+                    <div><span *ngFor="let cgName of myProfileToShow.coverageGroupName; let i = index" class="bold">{{cgName}}<span *ngIf="i<myProfileToShow.coverageGroupName.length-1">;</span></span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="userProfile-details userProfile-details-modify" [ngClass]="profileEdit?'hide':'show'">
+                <div class="alert alert-danger" *ngIf="errorMessage!=''">
+                  <small>{{errorMessage}}</small>
+                </div>
+                <div class="row">
+                  <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 paddingL0">
+                    <label>First Name</label>
+                    <div><input type="text" class="form-control is-valid" required [(ngModel)]="myProfileToShow.firstName" maxlength="100" required (keypress)="omit_special_char($event)" (keydown.control.V)="false" (keydown.control.shift.V)="false" (keydown.control.shift.v)="false" (keydown.control.v)="false" (contextmenu)="false"></div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 col-sm-5 col-xs-12 padding0">
+                    <label>Last Name</label>
+                    <div><input type="text" class="form-control is-valid" required [(ngModel)]="myProfileToShow.lastName" maxlength="100" required (keypress)="omit_special_char($event)" (keydown.control.V)="false" (keydown.control.shift.V)="false" (keydown.control.shift.v)="false" (keydown.control.v)="false" (contextmenu)="false"></div>
+                  </div>
+                </div>
+                <div class="gap10"></div>
+                <div class="row">
+                  <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 paddingL0">
+                    <label>Email</label>
+                    <div><input type="text" class="form-control" [(ngModel)]="myProfileToShow.email" disabled="disabled"></div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 col-sm-5 col-xs-12 padding0">
+                    <label>Phone</label>
+                    <div><input type="text" class="form-control is-valid" required maxlength="20" [(ngModel)]="myProfileToShow.phone"></div>
+                  </div>
+                </div>
+                <div class="gap10"></div>
+                <div class="row">
+                  <div class="col-md-4 col-lg-4 col-sm-6 col-xs-12 paddingL0">
+                    <label>Office Location</label>
+                    <div>
+                      <select [(ngModel)]="myProfileToShow.officeId" class="form-control">
+                        <option *ngFor="let op of officeSelectList" [value]="op.id" [selected]="op.id==myProfileToShow.officeId">{{op.title}}</option>
+                      </select>
+                      <!--<input type="text" class="form-control" value="Director Strategy & Marketing"></div>-->
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-lg-4 col-sm-5 col-xs-12 padding0">
+                    <label>Coverage Group</label>
+                    <!--<div><input type="text" value="+91 999 999 9999" class="form-control"></div>-->
+                    <div>
+                      <!--<p-multiSelect class="form-control" *ngIf="myProfileToShow.roleId!=userRoles.Banker" [options]="coverageGroupChoices" [(ngModel)]="myProfileToShow.coverageGroup" class="mulitiselectCoverageGrp is-valid"></p-multiSelect>
+  <select [(ngModel)]="myProfileToShow.coverageGroup[0]" class="form-control" *ngIf="myProfileToShow.roleId==userRoles.Banker">
+    <option *ngFor="let op of coverageGroupSelectList" [value]="op.id" [selected]="op.id==myProfileToShow.coverageGroup">{{op.title}}</option>
+  </select>-->
+                      <input type="text" class="form-control is-valid" required maxlength="20" [(ngModel)]="myProfileToShow.coverageGroupName" disabled="disabled">                      
+                    </div>
+                  </div>
+                </div>
+                <div class="gap10"></div>
+                <div class="row">
+                  <button class="btn form-btn" type="button" (click)="updateUserProfile()">Save</button>
+                  <span class="txt-login2 marginL20"> <a (click)="cancelEdit()">Cancel</a> </span>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

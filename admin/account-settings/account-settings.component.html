@@ -1,0 +1,127 @@
+<app-header></app-header>
+<div class="section-one">
+  <div class="container">
+    <div class="row pib_select_cal">
+      <div class="col-md-4 col-sm-7 col-xs-12 marginB10">
+        <h1 class="d-inline">Profile Settings</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>
+<section>
+  <div class="profileSettingsContainer">
+    <div class="profileSettingsBox">
+      <form class="white-box border_Top_purple">
+        <div class="row">
+          <div class="col-md-12 marginB20">
+            <label class="marginB10">Type of Reminder Email :</label>
+            <select class="form-control" [(ngModel)]="myNotificationSettingsData.settingType" [ngModelOptions]="{standalone: true}" (change)="onSettingTypeChange()">
+              <option *ngFor="let op of myNotificationEmailType" [ngValue]="op.id" [selected]="op.id==myNotificationSettingsData.settingType">{{op.title}}</option>
+            </select>
+          </div>
+          <div class="col-md-12 marginB20">
+            <label class="marginB10">Frequency</label>
+            <div class="row">
+              <div class="col-md-5 col-xs-6 col-sm-4">
+                
+                <select class="form-control" [(ngModel)]="myNotificationSettingsData.frequencyId" [ngModelOptions]="{standalone: true}" (change)="onDropDownSelection()">
+                  <option *ngFor="let op of myNotificationFrequency" [ngValue]="op.id" [selected]="op.id==myNotificationSettingsData.frequencyId">{{op.title}}</option>
+                </select>
+              </div>
+
+              <div class="col-md-4 col-xs-6 col-sm-4 paddingL0" *ngIf="myNotificationSettingsData.settingType==1">
+               
+                <div class="input-group date" data-date-format="DD.MM.YYYY" *ngIf="myNotificationSettingsData.frequencyId==meetingType.Monthly">
+                  <select class="form-control" [(ngModel)]="myNotificationSettingsData.settingDate" [ngModelOptions]="{standalone: true}" (change)="onDropDownSelection()">
+                    <option [selected]="myNotificationSettingsData.settingDate==null" [ngValue]="null" disabled="disabled" *ngIf="myNotificationSettingsData.settingDate==null">Select Date</option>
+                    <option *ngFor="let op of datesOfMonth" [ngValue]="op.id" [selected]="op.id==myNotificationSettingsData.settingDate">{{op.title}}</option>
+                  </select>
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+                <div class="input-group date" data-date-format="DD.MM.YYYY" *ngIf="myNotificationSettingsData.frequencyId==meetingType.Weekly">
+                  <select class="form-control" [(ngModel)]="myNotificationSettingsData.settingDay" [ngModelOptions]="{standalone: true}" (change)="onDropDownSelection()">
+                    <option [selected]="myNotificationSettingsData.settingDay==null" [ngValue]="null" disabled="disabled" *ngIf="myNotificationSettingsData.settingDay==null">Select Day</option>
+                    <option *ngFor="let op of daysOfWeek" [ngValue]="op.id" [selected]="op.id==myNotificationSettingsData.settingDay">{{op.title}}</option>
+                  </select>
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+                <div class="input-group date frequency-disabled" data-date-format="DD.MM.YYYY" *ngIf="myNotificationSettingsData.frequencyId==meetingType.Daily">
+                  <select class="form-control" [disabled]="true">
+                  </select>
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="col-md-3 paddingL0 col-sm-4 col-xs-6 frequency-timeBox" *ngIf="myNotificationSettingsData.settingType==1">
+                
+                <div class="row">
+                  <div class="col-md-8 col-xs-8 paddingR0">
+                    <div class="">
+                      <select class="form-control" [(ngModel)]="myNotificationSettingsData.notificationHour" [ngModelOptions]="{standalone: true}">
+                        <option *ngFor="let op of timeOfDay" [ngValue]="op.id" [selected]="op.id==myNotificationSettingsData.notificationHour">{{op.title}}</option>
+                      </select>
+                      
+                    </div>
+
+                  </div>
+                  <div class="col-md-4 col-xs-4 paddingL10">
+                    <label class="marginT10 size12">{{myNotificationSettingsData.timeZoneAbbreviation}}</label>
+                  </div>
+                </div>
+              </div>             
+              <div class="col-md-4 col-xs-6 col-sm-4 paddingL0" *ngIf="myNotificationSettingsData.settingType==2">
+                <div class="input-group date frequency-disabled" data-date-format="DD.MM.YYYY">
+                  <select class="form-control" [disabled]="true"></select>
+                  <div class="input-group-addon">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-3 paddingL0 col-sm-4 col-xs-6 frequency-timeBox" *ngIf="myNotificationSettingsData.settingType==2">
+               
+                <div class="row">
+                  <div class="col-md-8 col-xs-8 paddingR0">
+                    <div class="frequency-disabled" data-date-format="DD.MM.YYYY">
+                      <select class="form-control" [disabled]="true"></select>
+                      
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-xs-4 paddingL10">
+                    <label class="marginT10 size12">{{myNotificationSettingsData.timeZoneAbbreviation}}</label>
+                  </div>
+                </div>
+              </div>              
+            </div>
+            <div class="text-danger" *ngIf="errorMessage!=''">
+              <small>{{errorMessage}}</small>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <label class="marginB10">Receive Reminder Email For :</label>
+            <select class="form-control" [(ngModel)]="myNotificationSettingsData.meetingType" [ngModelOptions]="{standalone: true}">
+              <option *ngFor="let op of myNotificationMeetingType" [ngValue]="op.id" [selected]="op.id==myNotificationSettingsData.meetingType">{{op.title}}</option>
+            </select>
+          </div>
+
+        </div>
+      </form>
+      <div class="clearfix">&nbsp;</div>
+      <div class="text-center marginT10">
+        <button class="btn form-btn" type="button" (click)="SaveNotification()">Save</button>
+        <span class="txt-login2 marginL20"> <a (click)="CancelChanges()">Cancel</a> </span>
+      </div>
+    </div>
+
+
+  </div>
+</section>
+<app-footer></app-footer>

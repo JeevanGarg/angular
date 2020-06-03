@@ -1,0 +1,208 @@
+<app-header></app-header>
+<div class="section-one">
+  <div class="container">
+    <div class="row pib_select_cal">
+      <div class="col-md-4 col-sm-7 col-xs-12 marginB10">
+        <h1 class="d-inline">Manage Users</h1>
+      </div>
+    </div>
+    <div class="mainPage_tabs">
+      <ul>
+        <li><a href="javascript: void(0)" id="New" (click)="showNew(0)" [class.active]="tabToShow==newUsersTab">{{newUsersTab}}</a></li>
+        <li><a href="javascript: void(0)" id="Approved" (click)="showApproved(0)" [class.active]="tabToShow==approvedUsersTab">{{approvedUsersTab}}</a></li>
+        <li><a href="javascript: void(0)" id="Rejected" (click)="showRejected(0)" [class.active]="tabToShow==rejectedUsersTab">{{rejectedUsersTab}}</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="clearfix"></div>
+<section class="mid-container">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-xs-12 col-sm-12 ">
+        <div class="search-by-name-sec marginT10">
+          <div class="row">
+            <div class="col-md-3 col-sm-4 col-xs-12">
+              <input type="text" class="form-control search-inputBox" placeholder="Search" name="q" [(ngModel)]="searchTerm" (keyup.enter)="searchUsers(0)">              
+            </div>
+            <div class="manageUserIcon pull-right marginT10 marginR20">
+              <div class="dropdown filterManageUserDropdown">
+                <a href="javascript:void(0);" class="dropdown-toggle" id="chartFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" (click)="OpenDownloadDialog()">
+                  <i class="icon downloadIcon"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="chartFilter">
+                  <div class="col-md-12 col-lg-12 col-xl-12 padding15">
+                    <form>
+                      <!--<div class="row marginB10">
+                        <label class="fontSize12 bold col-md-12">Date Range</label>
+                        <div class="col-md-12">
+                          <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" [ngModelOptions]="{standalone: true}"></p-calendar>
+
+                        </div>
+                      </div>-->
+                      <div class="row marginB10">
+                        <label class="fontSize12 bold col-md-12">Fields</label>
+                        <div class="col-md-12">
+                          <!--<p-multiSelect [options]="cars" [(ngModel)]="selectedCars1" [panelStyle]="{minWidth:'12em'}"></p-multiSelect>-->
+                          <p-multiSelect [options]="userFields" [(ngModel)]="selectedUserFields" [panelStyle]="{minWidth:'12em'}" [ngModelOptions]="{standalone: true}"></p-multiSelect>
+                        </div>
+                      </div>
+                      <button type="button" class="btn form-btn" (click)="retrieveUsers()" [disabled]="selectedUserFields.length==0">Download</button>
+
+                    </form>                    
+                  </div>
+                </div>
+              </div>
+              <!--<a href="javascript:;">
+                <i class="icon filterIcon"></i>
+              </a>-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row myReq-row  ">
+      <div class="col-md-12">
+        <section class="marginT15 borderTopDashed" infiniteScroll [infiniteScrollDistance]="2" [infiniteScrollThrottle]="1" (scrolled)="onScroll()">
+          <div class="table-responsive marginT10">
+            <table class="table manageUserTable">
+              <thead>
+                <tr>
+                  <th width="100">FIRST NAME</th>
+                  <th width="100">LAST NAME</th>
+                  <th width="130">EMAIL</th>
+                  <th width="100">PHONE NO.</th>
+                  <th width="80">ROLE</th>
+                  <th width="120">COVERAGE GROUP</th>
+                  <th width="120">DESIGNATION</th>
+                  <th width="120">OFFICE</th>
+                  <th width="100">STATUS</th>
+                  <th width="100" *ngIf="tabToShow==rejectedUsersTab">Comment</th>
+                  <th width="50">ACTION</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let uitem of usersToShow;">
+                  <ng-container *ngIf="userToEdit==0 || userToEdit!=uitem.userId">
+                    <td width="100">{{uitem.firstName}}</td>
+                    <td width="100">{{uitem.lastName}}</td>
+                    <td width="130">{{uitem.email}}</td>
+                    <td width="100">{{uitem.phone}}</td>
+                    <td width="80">{{uitem.roleName==null?'Select Role':uitem.roleName}}</td>
+                    <td width="120"><span *ngFor="let cgName of uitem.coverageGroupName; let i = index">{{cgName}}<span *ngIf="i<uitem.coverageGroupName.length-1">;</span></span></td>
+                    <td width="120">{{uitem.designation==null?'Select Designation':uitem.designation}}</td>
+                    <td width="120">{{uitem.officeId==null?'Select Office':getOfficeName(uitem.officeId)}}</td>
+                    <td width="100">{{uitem.isApproved?'Approved':uitem.isApproved==false?'Rejected':'Select Status'}}</td>
+                    <td width="100" *ngIf="tabToShow==rejectedUsersTab">{{uitem.comment}}</td>
+                    <td width="50" class="manageUserIcon"><a (click)="editUserRow(uitem)"><i class="icon editIcon"></i></a></td>
+                  </ng-container>
+                  <ng-container *ngIf="userToEdit==uitem.userId">
+                    <td width="100">
+                      <input class="form-control is-valid" type="text" [(ngModel)]="uitem.firstName" maxlength="100" required (keypress)="omit_special_char($event)" (keydown.control.V)="false" (keydown.control.shift.V)="false" (keydown.control.shift.v)="false" (keydown.control.v)="false" (contextmenu)="false" />
+                      <!--<span class="text-danger" *ngIf="isNameInvalid(uitem.firstName)"><br />First Name is required &amp; must contain alphabets only</span>-->
+                    </td>
+                    <td width="100">
+                      <input class="form-control is-valid" type="text" [(ngModel)]="uitem.lastName" maxlength="100" required (keypress)="omit_special_char($event)" (keydown.control.V)="false" (keydown.control.shift.V)="false" (keydown.control.shift.v)="false" (keydown.control.v)="false" (contextmenu)="false" />
+                      <!--<span class="text-danger" *ngIf="isNameInvalid(uitem.lastName)"><br />Last Name is required &amp; must contain alphabets only</span>-->
+                    </td>
+                    <td width="130"><input class="form-control" type="text" [value]="uitem.email" disabled="disabled" /></td>
+                    <td width="100">
+                      <!--<input class="form-control is-valid" type="number" [(ngModel)]="uitem.phone" maxlength="15" (keydown.e)="false" (keydown.E)="false" (keydown.shift.E)="false" (keydown.shift.e)="false" (keydown.shift.+)="false" (keydown.shift.-)="false" (keydown.-)="false" (keydown.+)="false" required />-->
+                      <input class="form-control is-valid" type="text" maxlength="20" [(ngModel)]="uitem.phone" required />
+                      <!--<span *ngIf="isPhoneInvalid(uitem.phone)"><br />Phone is required & must contain numbers only</span>-->
+                    </td>
+                    <td width="80">
+                      <select class="selectInputlogin form-control is-invalid" [(ngModel)]="uitem.roleId" *ngIf="tabToShow!=newUsersTab" (change)="roleChange(uitem)">
+                        <option [selected]="uitem.roleId==null" [ngValue]="null" disabled="disabled" *ngIf="uitem.roleId==null">Select Role</option>
+                        <option *ngFor="let op of rolesList" [ngValue]="op.roleId" [selected]="op.roleId==uitem.roleId">{{op.title}}</option>
+                      </select>
+                      <select class="selectInputlogin form-control is-invalid" [(ngModel)]="uitem.roleId" *ngIf="tabToShow==newUsersTab" (change)="roleChange(uitem)">
+                        <option [ngValue]="null" disabled="disabled" *ngIf="uitem.roleId==null">Select Role</option>
+                        <option *ngFor="let op of rolesList" [ngValue]="op.roleId">{{op.title}}</option>
+                      </select>
+                      <!--{{uitem.roleName}}-->
+                    </td>
+                    <!--
+  <td width="120" *ngIf="uitem.roleId==userRoles.Banker" class="banker-multiselect">
+    <select class="selectInputlogin is-valid form-control" [(ngModel)]="uitem.coverageGroup[0]" required>
+      <option [selected]="uitem.coverageGroup[0]==null" disabled *ngIf="uitem.coverageGroup[0]==null" [ngValue]="defaultSelect">Chosse</option>
+      <option *ngFor="let op of coverageGroupList" [ngValue]="op.coverageId" [selected]="checkIfSelected(op.title,uitem.coverageGroupName)">{{op.title}}</option>
+    </select>
+    <!--<span *ngIf="isCoverageInvalid(uitem.coverageGroup)"><br />Coverage Group is required</span>-->
+                    <!-- </td>-->
+
+                    <!--<td width="120" class="mulitiselectCoverageGrpBox" *ngIf="uitem.roleId!=userRoles.Banker">-->
+                    <td width="120" class="mulitiselectCoverageGrpBox">
+                      <span>
+                        <p-multiSelect [options]="coverageGroupChoices" [(ngModel)]="uitem.coverageGroup" class="mulitiselectCoverageGrp is-valid"
+                                       [ngClass]="isCoverageInvalid(uitem.coverageGroup)?'invalidMultiselect':''" ></p-multiSelect>
+                      </span>
+
+                      <!--<span *ngIf="isCoverageInvalid(uitem.coverageGroup)"><br />Coverage Group is required</span>-->
+                      <!--<ul><li *ngFor="let cgName of uitem.coverageGroupName">{{cgName}}</li></ul>-->
+                    </td>
+                    <td width="120">
+                      
+                      <select class="selectInputlogin form-control" [(ngModel)]="uitem.designation">
+                        <option [selected]="uitem.designation==null" [ngValue]="null">Select Designation</option>
+                        <option *ngFor="let op of desigList" [ngValue]="op.title" [selected]="op.title==uitem.designation">{{op.title}}</option>
+                      </select>
+                      <!--{{uitem.designation}}-->
+                    </td>
+                    <td width="80">
+                      
+                      <select class="selectInputlogin form-control is-invalid" [(ngModel)]="uitem.officeId">
+                        <option [selected]="uitem.officeId==null" [ngValue]="null" disabled="disabled" *ngIf="uitem.officeId==null">Select Office</option>
+                        <option *ngFor="let op of officeList" [ngValue]="op.id" [selected]="op.id==uitem.officeId">{{op.officeName}}</option>
+                      </select>
+                    </td>
+                    <td width="100">
+                      <select class="selectInputlogin form-control custom-select" [(ngModel)]="uitem.isApproved" required>
+                        <option disabled="disabled" [ngValue]="null" [selected]="uitem.isApproved==null" *ngIf="uitem.isApproved==null">Select Status</option>
+                        <option [ngValue]="true" [selected]="true==uitem.isApproved">Approve</option>
+                        <option [ngValue]="false" [selected]="false==uitem.isApproved">Reject</option>
+                      </select>
+                      <!--{{uitem.isApproved}}-->
+                    </td>
+                    <td width="100" *ngIf="tabToShow==rejectedUsersTab">{{uitem.comment}}</td>
+                    <td width="50" class="manageUserIcon">
+                      <a [ngClass]="(isNameInvalid(uitem.firstName) || isNameInvalid(uitem.lastName) ||isPhoneInvalid(uitem.phone) || uitem.isApproved==null || isCoverageInvalid(uitem.coverageGroup))?'adisabled':''" (click)="updateUser(uitem)">
+                        <i class="icon updatedIcon" [ngClass]="(isNameInvalid(uitem.firstName) || isNameInvalid(uitem.lastName) ||isPhoneInvalid(uitem.phone) || uitem.isApproved==null || isCoverageInvalid(uitem.coverageGroup))?'adisabled':''"></i>
+                      </a>
+                    </td>
+                  </ng-container>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <ngx-ui-loader></ngx-ui-loader>
+        </section>
+      </div>
+      
+    </div>
+  </div>
+  <div class="container" *ngIf="recordsCount==0">
+    <div class="text-center marginT40">
+      <img src="assets/images/no-records.png" alt="">
+      <h3 class="text-uppercase color_grey marginB0">Sorry...!</h3>
+      <h3 class="marginT5 color_grey">No records found !</h3>
+    </div>
+    <ngx-ui-loader></ngx-ui-loader>
+  </div>
+</section>
+<p-dialog header="Save Confirmation and comments" [(visible)]="displayCommentsDialog" [closable]="true" [modal]="true" [responsive]="true" [blockScroll]="true" [style]="{width: '450px', minWidth: '300px'}" [minY]="70"
+          [closeOnEscape]="true" [positionTop]="100" class="displayComments_dialogue" (onHide)="CancelDialog()">
+  <div class="favdialog-box paddingBottom10">
+    <h4 class="marginB0 fontregular">You have made some changes to the user. Put some comments in the below box for better understanding.</h4>
+    <div class="padding10">
+      <!--<label class="size14">Add Comments</label>-->
+      <textarea type="text" class="form-control" placeholder="Please put your comments here..." [(ngModel)]="userEntityToReject.comment" rows="5" maxlength="500"></textarea>
+    </div>
+    <div>
+      <button class="btn btn_step_no marginR10" (click)="CancelDialog()">Cancel</button>
+      <button class="btn btn_step_yes" (click)="saveUserData(userEntityToReject)" [disabled]="userEntityToReject.isApproved?false: isCommentInvalid(userEntityToReject.comment)">Save</button>
+    </div>
+  </div>
+</p-dialog>
+<app-footer></app-footer>

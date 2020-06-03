@@ -1,0 +1,37 @@
+a.adisabled {
+  cursor: not-allowed;
+  opacity: .65;
+}
+
+  a.adisabled:hover {
+    text-decoration: none;
+  }
+
+  a.adisabled:focus {
+    text-decoration: none;
+  }
+
+  a.adisabled:active {
+    text-decoration: none;
+  }
+
+.aPanel {
+  margin: 1em;
+}
+
+i.adisabled {
+  cursor: not-allowed;
+  opacity: .65;
+}
+
+  i.adisabled:hover {
+    text-decoration: none;
+  }
+
+  i.adisabled:focus {
+    text-decoration: none;
+  }
+
+  i.adisabled:active {
+    text-decoration: none;
+  }

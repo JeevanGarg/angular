@@ -1,0 +1,208 @@
+<app-header></app-header>
+
+<div class="section-one">
+  <div class="container">
+    <div class="row pib_select_cal">
+      <div class="col-md-4 col-xs-12 marginB10">
+        <h1 class="d-inline">My Meeting Invites</h1>
+        <div class="col-md-3 col-xs-4 pull-right padding0 marginR60">
+          <select class="form-control" name="range_date" id="range_date" (change)="onselectionChanged($event)">
+            <option value="day">By Day</option>
+            <option value="range">By Range</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-xs-12 marginB10 pull-right paddingMob calen day" *ngIf="!isDateRange">
+        <div class="col-md-12 col-xs-6 padding0 pull-right">
+          {{selectedVal}}
+          <select class="form-control meetingMonth" (change)="onSelMonth($event)">
+            <option *ngFor="let sel of nextMonth" [ngValue]="sel" [selected]="sel==selectedVal">
+              {{sel}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div id="rangeCalendar" class="col-md-4 col-xs-12 marginB10 pull-right paddingL0 paddingMob range calen custom-calender" *ngIf="isDateRange">
+        <div class="calendar-alert" *ngIf="!isRangeValid">
+          <small>Please select a valid date range</small>
+        </div>
+        <p-calendar dateFormat="dd-M-y" [(ngModel)]="rangeDate" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
+                    [style]="{'z-index': '1100'}" (onClose)="onGetDataByRange()" [showIcon]="true" selectionMode="range"
+                    placeholder="Select Date Range" [readonlyInput]="true" class="primeng-calender form-control" [minDate]="minDateRange" [maxDate]="maxDateRange"></p-calendar>
+      </div>
+
+    </div>
+  </div>
+  <div class="container-fluid border_white calen day" id="daytabCalendar" *ngIf="!isDateRange">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="sub-header date-line">
+            <ngx-slick-carousel class="carousel"
+                                #slickModal="slick-carousel"
+                                [config]="slideConfig"
+                                (init)="slickInit($event)"
+                                (breakpoint)="breakpoint($event)"
+                                (afterChange)="afterChange($event)"
+                                (beforeChange)="beforeChange($event)">
+              <div ngxSlickItem #currentSlide *ngFor="let meeting of meetingsDate;let k=index" id="{{meeting.meetingFullDate}}"
+                   (click)="OnClick(meeting,k)" class="slide" [ngClass]="meeting.meetingFullDate==selectedDateOnCalendar?'slick-current':''">
+                <div [ngClass]="datesWithMeetings.lastIndexOf(calendarDates[k])>-1?'slick-current-meetings':''">
+                  <p>{{meeting.meetingDate}}</p>
+                  <p>{{meeting.meetingDay}}</p>
+                </div>
+              </div>
+            </ngx-slick-carousel>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clearfix"></div>
+<div class="swipe-tabs-container mid-container">
+  <div class="swipe-tab-content">
+    <section class="marginT10" infiniteScroll
+             [infiniteScrollDistance]="2"
+             [infiniteScrollThrottle]="1"
+             (scrolled)="onScroll()">
+      <div class="container ">
+        <div class="row">
+          <div class="col-md-12 col-xs-12 col-sm-12 ">
+            <div class="search-by-name-sec">
+              <div class="row">
+                <div class="col-md-3 col-xs-7">
+                  <input type="text" id="srchByName" class="form-control search-inputBox" placeholder="Search" [(ngModel)]="name" (keyup.enter)="searchMeetings()">
+                </div>
+                <div class="col-md-1 col-xs-4 pull-right marginT10 count-results">
+                  <P class="marginB0">
+                    Results :
+                    <span id="countRec" class="bold">{{records}}</span>
+                  </P>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-xs-12 marginT20 ">
+
+            <div *ngFor="let item of meetingsList;  let k = index; let first = first; let last = last">
+              <span class="date-seperator-line" *ngIf="k==0"><b>{{meetingsList[0].startTime| showLocalDate | date}}</b></span>
+              <div class="listing " #myVar [ngClass]="{ first: first, last: last }">
+                <div class="col-md-12 col-xs-12 pad0 borderbottom " *ngIf="meetingsList.length>0">
+                  <div class="col-md-8 col-xs-12 pad0 " *ngIf="meetingsList.length>0">
+                    <h3>
+                      {{item.subject}}
+                    </h3>
+                    <input type="hidden" id="meetingSub" ng-model="meetingSub" value="{{item.subject}}" />
+                    <input type="hidden" id="meetingId" ng-model="meetingId" value="{{item.meetingId}}" />
+                    <span class="date_listing">
+                      <!--{{ item.startTime |date }} | {{item.startTime|date:'shortTime'}} - {{item.endTime|date:'shortTime'}}-->
+                      {{item.startTime | showLocalDate | date}} | {{item.startTime|showLocalDate | date:'shortTime'}} - <!--{{item.endTime | utcDate | date}} |--> {{item.endTime|showLocalDate | date:'shortTime'}}
+                    </span>
+                  </div>
+                  <div class="col-md-4 col-xs-12 pad0 pull-right hidden-xs text-right" *ngIf="meetingsList.length>0">
+                    <div class="marginR0">
+                      <!--<a class="btn marginR2" (click)="getRaiseRequestData(item,item.attendes,item.hostAttendes,item.optAttended)" [ngClass]="{'btn-raise': item.status=='RAISE','btn_pending': item.status=='PENDING',
+                      'btn_close':  item.status=='CLOSED'}">{{item.status=='RAISE'? 'Raise Request' :item.status=='PENDING'? 'Request Pending' : 'Request Closed' }}</a>-->
+                      <span *ngIf="(item.startTime|showLocalDate)<currentDate && item.status!='CLOSED'">
+                        <a class="btn marginR2 adisabled" [ngClass]="{'btn-raise': item.status=='RAISE','btn_pending': item.status=='PENDING',
+                         'btn_close':  item.status=='CLOSED'}">{{item.status=='RAISE'? 'Raise Request' :item.status=='PENDING'? 'Request Pending' : 'Request Closed' }}</a>
+                      </span>
+                      <span>
+                        <a *ngIf="(item.startTime|showLocalDate)>=currentDate || item.status=='CLOSED'" class="btn marginR2" (click)="getRaiseRequestData(item,item.attendes,item.hostAttendes,item.optAttended)" [ngClass]="{'btn-raise': item.status=='RAISE','btn_pending': item.status=='PENDING',
+                         'btn_close':  item.status=='CLOSED'}">{{item.status=='RAISE'? 'Raise Request' :item.status=='PENDING'? 'Request Pending' : 'Request Closed' }}</a>
+                      </span>
+                      <a href="#" class="btn btn_cancel_invite" data-toggle="modal" id="cancel2" (click)="onCancelMeeting(item.id,item.subject,item.startTime)" data-target="#cancel">
+                        <i class="img_sprite list_close_icon"></i>Remove Meeting
+                      </a>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12 col-xs-12 pad0 borderbottom content_listing">
+                  <div class="showClass 2" id="21">
+                    <p>
+                      {{item.description| slice:0:250}}
+                      <a href="javascript:void(0)" class="1" (click)="toggle($event)" *ngIf="item.description!='-'">Read More</a>
+                    </p>
+                    <p class="hide">
+                      {{item.description}}
+                      <a href="javascript:void(0)" (click)="toggle($event)" *ngIf="item.description!='-'">Read Less</a>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-12 col-xs-12 pad0 ">
+                  <a href="javascript:void(0)" class="attendies_drop" (click)="toggle_attendees($event)"> ATTENDIES({{ item.attendesCount}})<i class="fa att-arrow fa-caret-down" (click)="toggle_attendees($event)"></i> </a>
+                  <div class="attendies_row hide">
+                    <ul class="attendies_box" *ngFor="let host of item.hostAttendes">
+                      <li>
+                        <i class="img_sprite attendies_icon "></i>
+                        <p>
+                          <span class="bold d-block">{{host.attendeName}} (Host)</span>
+                          <span class="d-block">{{host.attendeEmail}}</span>
+                        </p>
+                      </li>
+                    </ul>
+
+                    <ul class="attendies_box" *ngFor="let attend of item.attendes;let i = index">
+                      <li>
+                        <i class="img_sprite attendies_icon "></i>
+                        <p>
+                          <span class="bold d-block">{{attend.attendeName}}</span>
+                          <span class="d-block">{{attend.attendeEmail}}</span>
+                        </p>
+                      </li>
+                    </ul>
+                    <ul class="attendies_box" *ngFor="let opt of item.optAttended">
+                      <li>
+                        <i class="img_sprite attendies_icon "></i>
+                        <p>
+                          <span class="bold d-block">{{opt.attendeName}}(Optional)</span>
+                          <span class="d-block">{{opt.attendeEmail}}</span>
+                        </p>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-xs-12 marginT10 pad0  hidden-md hidden-sm hidden-lg">
+                    <span *ngIf="(item.startTime|showLocalDate)<currentDate && item.status!='CLOSED'">
+                      <a href="javascript:void(0)" class="btn btn-raise marginR2 action-btns adisabled" [ngClass]="{'btn-raise': item.status=='RAISE','btn_pending': item.status=='PENDING',
+                         'btn_close':  item.status=='CLOSED'}">{{item.status=='RAISE'? 'Raise Request' :item.status=='PENDING'? 'Request Pending' : 'Request Closed' }}</a>
+                    </span>
+                    <span *ngIf="(item.startTime|showLocalDate)>=currentDate || item.status=='CLOSED'">
+                      <a href="javascript:void(0)" class="btn btn-raise marginR2" (click)="getRaiseRequestData(item,item.attendes,item.hostAttendes,item.optAttended)" [ngClass]="{'btn-raise': item.status=='RAISE','btn_pending': item.status=='PENDING',
+                         'btn_close':  item.status=='CLOSED'}">{{item.status=='RAISE'? 'Raise Request' :item.status=='PENDING'? 'Request Pending' : 'Request Closed' }}</a>
+                    </span>
+
+                    <a href="javascript:void(0)" class="btn btn_cancel_invite" data-toggle="modal" id="cancel2" (click)="onCancelMeeting(item.id,item.subject,item.startTime)" data-target="#cancel">
+                      <i class="img_sprite list_close_icon"></i>Remove Meeting
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <span class="date-seperator-line" *ngIf="!last && (meetingsList[k].startTime| showLocalDate | date)!= (meetingsList[k+1].startTime| showLocalDate | date)">
+                <b>{{meetingsList[k+1].startTime| showLocalDate | date}}</b>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="text-center marginT40" *ngIf="records==0 && !searchingRecords">
+          <img src="assets/images/no-results.png" alt="">
+          <h3 class="text-uppercase color_grey marginB0">No meeting invites</h3>
+          <h3 class="marginT5 color_grey">found for the day..!</h3>
+        </div>
+        <ngx-ui-loader></ngx-ui-loader>
+      </div>
+    </section>
+  </div>
+</div>
+
+<p-confirmDialog header="Confirmation" class="confirmation_dialog" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+<app-footer></app-footer>
+
